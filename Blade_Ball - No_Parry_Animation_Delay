@@ -1,0 +1,29 @@
+
+
+for i, v in next, getgc(true) do
+    if type(v) == "function" and getinfo(v).name == "parry" then
+        for ii, vv in pairs(getconstants(v)) do
+            if type(vv) == "number" and vv == 1.5 then
+                setconstant(v, ii, 0.1)
+            end
+            if type(vv) == "number" and vv == 1 then
+                setconstant(v, ii, 0.1)
+            end
+            if type(vv) == "number" and vv == 1.3 then
+                setconstant(v, ii, 0.1)
+            end
+            if type(vv) == "number" and vv == 0.8 then
+                setconstant(v, ii, 0.1)
+            end
+            if type(vv) == "number" and vv == 0.5 then
+                setconstant(v, ii, 0.1)
+            end
+        end
+        game.StarterGui:SetCore("SendNotification", {
+           Title = "Script Made By Breadido";
+           Text = "No Parry Animation Cooldown Succesfully Enabled!. If you die you will need to re-execute it";
+           Duration = 9e9;
+           Button1 = "YESSIR!";
+        })
+    end
+end
