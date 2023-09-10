@@ -22,7 +22,7 @@ for i, v in next, getgc(true) do
         game.StarterGui:SetCore("SendNotification", {
            Title = "Script Made By Breadido";
            Text = "No Parry Animation Cooldown Succesfully Enabled!. If you die you will need to re-execute it";
-           Duration = 9e9;
+           Duration = 10;
            Button1 = "YESSIR!";
         })
     end
