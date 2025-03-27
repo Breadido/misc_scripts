@@ -1,4 +1,5 @@
 -- ik it looks absolutely shit but idc
+getgenv().instantpick = true
 local client = {
     ropedata = {};
 }
