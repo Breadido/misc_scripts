@@ -1,18 +1,17 @@
--- ik it looks absolutely shit but idc
-getgenv().instantpick = true
+
 local client = {
-    ropedata = {};
+    geomUtils = require(game:GetService("ReplicatedStorage"):WaitForChild("Std"):WaitForChild("GeomUtils"));
+    vehiclelinkbinder = require(game:GetService("ReplicatedStorage").VehicleLink.VehicleLinkBinder);
+    vehiclelinkutils =  require(game:GetService("ReplicatedStorage").VehicleLink.VehicleLinkUtils);
 }
-local old = require(game:GetService("ReplicatedStorage").VehicleLink.VehicleLinkBinder)._constructor._updateSeeking
-require(game:GetService("ReplicatedStorage").VehicleLink.VehicleLinkBinder)._constructor._updateSeeking = (function(ropedata)
-    client.ropedata = ropedata
-    return old(ropedata)
+local uh = client.vehiclelinkbinder
+local old = uh._constructor._hookNearest
+uh._constructor._hookNearest = (function(...)
+    local args = {...}
+    local rope = args[1].obj
+    local obj = args[1].nearestObj
+    local requestLink = args[1].manifest.reqLinkRemote
+    local cf = obj.PrimaryPart.CFrame:PointToObjectSpace(client.geomUtils.closestPointInPart(obj.PrimaryPart, rope.Position), rope.Position)
+    requestLink:FireServer(obj, cf)
+    return
 end)
-while instantpick do task.wait()
-    pcall(function() -- i'm lazy
-        if client.ropedata.nearestObj ~= nil then
-            local cframe = client.ropedata.nearestObj.PrimaryPart.CFrame:PointToObjectSpace(require(game:GetService("ReplicatedStorage"):WaitForChild("Std"):WaitForChild("GeomUtils")).closestPointInPart(client.ropedata.nearestObj.PrimaryPart, client.ropedata.obj.Position))
-            client.ropedata.manifest.reqLinkRemote:FireServer(client.ropedata.nearestObj, cframe)
-        end
-    end)
-end
