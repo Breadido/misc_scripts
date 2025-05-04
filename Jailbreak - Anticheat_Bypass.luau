@@ -12,7 +12,7 @@ end
 
 hookfunction(jbremote, function(...)
     local args = {...}
-    if #args == 3 and debug.traceback():find("LocalScript:1343") then
+    if #args == 3 and debug.traceback():find("LocalScript:1346") then
         return
     end
     return oldjbremote(...)
