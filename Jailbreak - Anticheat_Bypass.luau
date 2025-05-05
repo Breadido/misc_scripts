@@ -1,19 +1,15 @@
-local jbremote
-local oldjbremote
-for i,v in next, getgc(true) do
-    if type(v) == "function" and getinfo(v).name == "EventFireServer" and tostring(getfenv(v).script) == "LocalScript" then
-        jbremote = v
-        oldjbremote = v
-    end
-    if type(v) == "function" and getinfo(v).name:find("CheatCheck") and tostring(getfenv(v).script) == "LocalScript" then
-        hookfunction(v, function() end)
-    end
-end
-
-hookfunction(jbremote, function(...)
-    local args = {...}
-    if #args == 3 and debug.traceback():find("LocalScript:1346") then
-        return
-    end
-    return oldjbremote(...)
-end)
+getgenv().acbypassed = false
+getgenv().debugOutput = false
+local key, jbremote = loadstring(game:HttpGet('https://raw.githubusercontent.com/Introvert1337/RobloxReleases/refs/heads/main/Scripts/Jailbreak/KeyFetcher.lua'))()
+local oldjbremote = getupvalue(network.FireServer, 1)
+	setupvalue(jbremote.FireServer, 1, function(key,...) 
+		task.wait()
+		local args = {...}
+		if #args == 2 and debug.traceback():find("LocalScript:1346") then 
+			getgenv().acbypassed = true
+			return 
+		end
+		return oldjbremote(key, ...)
+	end)
+task.wait(1)
+print(getgenv().acbypassed)
