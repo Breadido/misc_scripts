@@ -1,6 +1,4 @@
 -- i'm not going to explain what this does but it does :>
-local diggingspeed = 0.001
-local panningwalk = true -- set true to false to disable panning walk
 if getgenv().client == nil then
     getgenv().client = {}
     for i,v in next, getgc() do
