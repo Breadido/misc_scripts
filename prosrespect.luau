@@ -1,10 +1,9 @@
--- i'm not going to explain what this does but it does :>
 if getgenv().client == nil then
     getgenv().client = {}
     for i,v in next, getgc() do
         if type(v) == "function" and islclosure(v) then
-            local sc = getfenv(v).script
-            if sc ~= nil and sc.Parent.Name == "Scripts" and sc.Name == "PanClient" then
+            local sc = tostring(getfenv(v).script)
+            if sc ~= nil and sc == "PanClient" then
 				if getinfo(v).name == "stopDigging" then
                     client.originalstopdigging = clonefunction(v)
                 end
