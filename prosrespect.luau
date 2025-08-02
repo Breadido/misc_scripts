@@ -12,6 +12,16 @@ if getgenv().client == nil then
         end
     end
 end
+client.getpan = (function()
+    for i,v in next, game.Players.LocalPlayer.Backpack:GetChildren() do
+        if v.Name:lower():find("pan") then
+            return v
+        end
+    end
+    return game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+end)
+client.oldpn = client.getpan().Name
+setconstant(client.startPanning, 29, "Panningg")
 setconstant(client.startDigging, 15, -9e9)
 setconstant(client.startDigging, 39, -9e9)
 setconstant(client.startDigging, 60, -9e9)
