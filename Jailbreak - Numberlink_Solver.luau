@@ -27,7 +27,12 @@ end
 
 function getPossiblePaths(node, target, visited, path, correctPaths)
     visited[node] = true
-    table.insert(path, node)
+    path[#path + 1] = node
+    if #path > rows * columns then
+        visited[node] = nil
+        path[#path] = nil
+        return
+    end
 
     if matrixList[node] == target and #path > 1 then
         table.insert(correctPaths, table.clone(path))
@@ -38,22 +43,37 @@ function getPossiblePaths(node, target, visited, path, correctPaths)
             u = node > rows,
             d = node <= rows * (columns - 1)
         }
-
-        for direction, allowed in pairs(possibleDirections) do
+        local ordered = {}
+        for dir, allowed in pairs(possibleDirections) do
             if allowed then
-                local nextNode = traverseMatrix(node, direction)
+                local nextNode = traverseMatrix(node, dir)
+                local dist = math.abs(
+                    ((nextNode - 1) % rows) - ((target - 1) % rows)
+                ) + math.abs(
+                    math.ceil(nextNode / rows) - math.ceil(target / rows)
+                )
+                ordered[#ordered + 1] = { dir = dir, node = nextNode, dist = dist }
+            end
+        end
 
-                if not visited[nextNode] and (matrixList[nextNode] == 0 or matrixList[nextNode] == target) then
-                    if manhattan(nextNode, node) <= rows + columns then
-                        getPossiblePaths(nextNode, target, visited, path, correctPaths)
-                    end
+        table.sort(ordered, function(a, b)
+            return a.dist < b.dist
+        end)
+
+        for _, data in ipairs(ordered) do
+            local nextNode = data.node
+
+            if not visited[nextNode] and
+               (matrixList[nextNode] == 0 or matrixList[nextNode] == target) then
+                if data.dist <= (rows * columns - #path) then
+                    getPossiblePaths(nextNode, target, visited, path, correctPaths)
                 end
             end
         end
     end
 
     visited[node] = nil
-    table.remove(path)
+    path[#path] = nil
 
     if not path[1] then
         return correctPaths
@@ -97,7 +117,7 @@ local function selectNonOverlapping(groupIndex)
     return false
 end
 
-return function(matrix)
+solver = function(matrix)
     table.clear(matrixList)
     table.clear(chosenPaths)
     table.clear(usedPaths)
@@ -161,3 +181,4 @@ return function(matrix)
 
     return solvedMatrix
 end
+return solver
